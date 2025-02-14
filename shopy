@@ -1,0 +1,57 @@
+import React, { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Camera } from "lucide-react";
+
+const FashionTryOn = () => {
+  const [image, setImage] = useState(null);
+  const [clothing, setClothing] = useState(null);
+  const [resultImage, setResultImage] = useState(null);
+
+  const handleCapture = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => setImage(reader.result);
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleUploadClothing = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => setClothing(reader.result);
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleTryOn = () => {
+    if (image && clothing) {
+      // Mocking the result image for now
+      setResultImage(clothing); 
+    }
+  };
+
+  return (
+    <div className="p-4">
+      <h1 className="text-xl font-bold mb-4">Fashion Try-On App</h1>
+      <Card>
+        <CardContent className="p-4 flex flex-col items-center">
+          <input type="file" accept="image/*" capture="user" onChange={handleCapture} className="mb-2" />
+          <input type="file" accept="image/*" onChange={handleUploadClothing} className="mb-2" />
+          <Button onClick={handleTryOn} disabled={!image || !clothing}>
+            Try On
+          </Button>
+          <div className="mt-4">
+            {image && <img src={image} alt="User" className="w-40 h-40 object-cover" />}
+            {clothing && <img src={clothing} alt="Clothing" className="w-40 h-40 object-cover mt-2" />}
+            {resultImage && <img src={resultImage} alt="Result" className="w-40 h-40 object-cover mt-2 border-2 border-blue-500" />}
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+};
+
+export default FashionTryOn;
